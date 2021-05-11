@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Joe Bloggs - Curriculum Vitae</title>
+
+<meta name="viewport" content="width=device-width"/>
+<meta name="description" content="The Curriculum Vitae of Joe Bloggs."/>
+<meta charset="UTF-8">
+
+<link type="text/css" rel="stylesheet" href="style.css">
+<link href='http://fonts.googleapis.com/css?family=Rokkitt:400,700|Lato:400,300' rel='stylesheet' type='text/css'>
+
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+
+
+<body id="top">
+
+<div class="x">
+	<ul>
+		<li><a class="active" href="#home">CV</a></li>
+			<li><a href="View1.php">Personal Information</a></li>
+		<li><a href="View2.php">Experiences</a></li>
+		<li><a href="View3.php">Education & Skills</a></li>
+		<li><a href="View4.php">Languages & Hobbies</a></li>
+	</ul>
+</div>
+
+
+	<div style="margin-left:0%;padding:1px 16px;height:100%;">
+
+<div id="cv" class="instaFade">
+
+	<div class="mainDetails">
+
+		<?php
+		$fp = fopen("../Files/etape1.txt", "r") or exit("Unable to open file!");
+		$line=0;
+		while(!feof($fp))
+		{
+			  $line++;
+				$data=fgets($fp);
+
+				if($line==1)
+        $FirstName=$data;
+				else
+				if($line==2)
+				$LastName=$data;
+				if($line==3)
+				$Email=$data;
+				if($line==4)
+				$Number=$data;
+				if($line==5)
+				$Adress=$data;
+				if($line==6)
+				$birthday=$data;
+				if($line==7)
+				$gender=$data;
+				if($line==8)
+				$description=$data;
+				if($line>8)
+        $description=$description." ".$data  ;
+
+
+
+		}
+		fclose($fp);
+	?>
+		<div id="name">
+			<h2 class="quickFade delayThree"><?php echo $FirstName; ; ?></h2>
+			<h2 class="quickFade delayThree"><?php echo $LastName; ; ?></h2>
+		</div>
+
+		<div id="contactDetails" class="quickFade delayFour">
+			<ul>
+				<li> <a target="_blank"><?php echo $Email; ; ?></a></li>
+				<li> <?php echo $Number; ; ?></li>
+				<li> <?php echo $Adress; ; ?></li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div id="mainArea" class="quickFade delayFive">
+		<section>
+			<article>
+				<div class="sectionTitle">
+					<h1>Personal Profile</h1>
+				</div>
+
+				<div class="sectionContent">
+					<p class="subDetails"><?php echo "Birthday : ".$birthday; ; ?></p>
+					<p class="subDetails"><?php echo "Gender : ".$gender; ; ?></p>
+					<p><?php echo $description; ; ?></p>
+				</div>
+			</article>
+			<div class="clear"></div>
+		</section>
+
+		<?php
+		$fp = fopen("../Files/etape2.txt", "r") or exit("Unable to open file!");
+		$cnt=1;
+		$ExpDesc=array();
+		$ExpDescCounter=0;
+		$Company= array();
+	  $StartDate= array();
+		 $finishDate= array();
+		while(!feof($fp))
+		{
+				$data=fgets($fp);
+				if($cnt==1)
+				{
+					if($data!="---\n")
+					{
+						if(empty($ExpDesc[$ExpDescCounter]))
+						$ExpDesc[$ExpDescCounter]="";
+						$ExpDesc[$ExpDescCounter].=$data;
+					}
+					else
+					{
+							$cnt++;
+					   	$ExpDescCounter++;
+					}
+				}else
+					if($cnt==2)
+					{
+					  array_push($Company,$data);
+						$cnt++;
+					}else
+						if($cnt==3)
+						{
+							array_push($StartDate,$data);
+							$cnt++;
+						}else
+							if($cnt==4)
+							{
+								array_push($finishDate,$data);
+								$cnt++;
+							}
+							else
+								if($cnt==5)
+								{
+									$cnt=1;
+								}
+
+
+		}
+		fclose($fp);
+		?>
+
+		<section>
+			<div class="sectionTitle">
+				<h1>Work Experience</h1>
+			</div>
+
+      <?php
+			    for($i=0;$i<$ExpDescCounter;$i++)
+			    echo'
+			    <div class="sectionContent">
+			  	<article>
+					<h2>Experience at '.$Company[$i].'</h2>
+					<p class="subDetails">'.$StartDate[$i].'-'.$finishDate[$i].'</p>
+					<p>'.$ExpDesc[$i].'</p>
+				  </article>
+		   	  </div>
+			    <div class="clear"></div>
+		      </section>'
+    ?>
+
+		<?php
+		$fp = fopen("../Files/etape4.txt", "r") or exit("Unable to open file!");
+		$line=0;
+		while(!feof($fp))
+		{
+				$line++;
+				$data=fgets($fp);
+
+				if($line==5)
+				{
+						$skills = $data;
+            $skills=explode("/",$skills);
+				}
+
+
+		}
+		fclose($fp);
+		?>
+
+		<section>
+			<div class="sectionTitle">
+				<h1>Skills</h1>
+			</div>
+
+			<div class="sectionContent">
+				<ul class="keySkills">
+					<?php
+					 for ($x = 0; $x <count($skills); $x++)
+					 echo "<li>".$skills[$x]."</li>";
+					?>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</section>
+
+		<?php
+		$fp = fopen("../Files/etape4.txt", "r") or exit("Unable to open file!");
+		$line=0;
+		while(!feof($fp))
+		{
+				$line++;
+				$data=fgets($fp);
+
+				if($line==1)
+					$school = $data;
+					else
+					if($line==2)
+						$diplom = $data;
+						else
+						if($line==3)
+							$start = $data;
+							else
+							if($line==4)
+								$finish = $data;
+
+		}
+		fclose($fp);
+		?>
+
+		<section>
+			<div class="sectionTitle">
+				<h1>Education</h1>
+			</div>
+
+			<div class="sectionContent">
+				<article>
+					<h2><?php echo $school ; ?></h2>
+						<p class="subDetails"><?php echo "Diplome : ".$diplom; ; ?></p>
+					<p class="subDetails"><?php echo $start."-".$finish; ; ?></p>
+					<br>
+				</article>
+
+
+			</div>
+			<div class="clear"></div>
+		</section>
+
+		<?php
+		$fp = fopen("../Files/etape3.txt", "r") or exit("Unable to open file!");
+		$line=0;
+		$hobbies="";
+		while(!feof($fp))
+		{
+				$line++;
+				$data=fgets($fp);
+
+				if($line==1)
+				{
+					$langagues = $data;
+          $langagues=explode("/",$langagues);
+				}
+				else
+				if($line>1)
+				{
+         $hobbies= $hobbies." ".$data;
+
+				}
+
+
+		}
+		fclose($fp);
+		?>
+		<section>
+			<div class="sectionTitle">
+				<h1>Languages</h1>
+			</div>
+
+			<div class="sectionContent">
+				<ul class="keySkills">
+					 <?php
+			    	for ($x = 0; $x <count($langagues); $x++)
+					  echo "<li>".$langagues[$x]."</li>";
+					 ?>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</section>
+
+		<section>
+			<article>
+				<div class="sectionTitle">
+					<h1>Hobbies</h1>
+				</div>
+
+				<div class="sectionContent">
+					<?php
+					 echo "<p>".$hobbies."</p>";
+					?>
+				</div>
+			</article>
+			<div class="clear"></div>
+		</section>
+
+	</div>
+
+
+</form>
+</div>
+</div>
+
+</body>
+</html>
